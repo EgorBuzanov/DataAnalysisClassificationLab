@@ -5,6 +5,8 @@ from dotenv import find_dotenv, load_dotenv
 from sklearn.model_selection import GridSearchCV
 from src.utils import load_pickle, save_as_pickle
 import pandas as pd
+import catboost
+import sklearn
 
 
 @click.command()
