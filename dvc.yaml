@@ -23,7 +23,7 @@ stages:
     deps:
     - data/interim/train_target.pkl
     - data/processed/train_data.pkl
-    - src/models/predict_model.py
+    - src/models/train_model.py
     - src/models/train.py
     outs:
     - models/best_model.pkl

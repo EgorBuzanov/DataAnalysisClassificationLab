@@ -46,16 +46,16 @@ stages:
     - path: data/processed/train_data.pkl
       md5: dac2aa538afba95cbe9cd2e967242d7f
       size: 66084
-    - path: src/models/predict_model.py
-      md5: 6f249a8ecb290f984bf5034c04fd8c5e
-      size: 1263
     - path: src/models/train.py
       md5: 1d2c38c0b2c4a6cabeecd48e087b8b69
       size: 4537
+    - path: src/models/train_model.py
+      md5: f4dd8b82e3e2f9a480736bdc8aaee017
+      size: 1487
     outs:
     - path: models/best_model.pkl
-      md5: 73e4067a41b4f178ac507fc782b6374d
-      size: 1674964
+      md5: 70059eb372157c34959da3be67de06f4
+      size: 9291813
   preprocess_test_data:
     cmd: python src/data/make_dataset.py data/raw/test.csv --output_data_filepath
       data/interim/test.pkl
@@ -97,12 +97,12 @@ stages:
       md5: dad2cc370e98b78ccd8cb95a81ff512d
       size: 46326
     - path: models/best_model.pkl
-      md5: 73e4067a41b4f178ac507fc782b6374d
-      size: 1674964
+      md5: 70059eb372157c34959da3be67de06f4
+      size: 9291813
     - path: src/models/predict_model.py
-      md5: 6f249a8ecb290f984bf5034c04fd8c5e
-      size: 1263
+      md5: 09dd86ca3afab49c8a3b22a6016dced2
+      size: 1285
     outs:
     - path: predictions/test_predict.pkl
-      md5: a05d8ddc07c4ebb2f564d8ebcd299643
-      size: 25673
+      md5: 7d8f4694d36e72bffa8982878d8537d6
+      size: 3343
