@@ -1,12 +1,18 @@
 import pickle
-from typing import Union
+from typing import Any, Union
 from pandas import DataFrame
 from pandas.core.indexes.base import Index as PandasIndex
 
 
-def save_as_pickle(obj: Union[DataFrame, PandasIndex], path: str) -> None:
+def save_as_pickle(obj: Any, path: str) -> None:
     if isinstance(obj, DataFrame):
         obj.to_pickle(path)
-    elif isinstance(obj, PandasIndex):
+    else:
         with open(path, 'wb') as f:
             pickle.dump(obj, f)
+
+
+def load_pickle(path: str) -> None:
+    with open(path, 'rb') as f:
+        model = pickle.load(f)
+    return model

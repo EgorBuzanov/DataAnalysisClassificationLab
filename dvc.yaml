@@ -1,0 +1,54 @@
+stages:
+  preprocess_train_data:
+    cmd: python src/data/make_dataset.py data/raw/train.csv --output_data_filepath
+      data/interim/train_data.pkl --output_target_filepath data/interim/train_target.pkl
+    deps:
+    - data/raw/train.csv
+    - src/data/make_dataset.py
+    - src/data/preprocess.py
+    outs:
+    - data/interim/train_data.pkl
+    - data/interim/train_target.pkl
+  train_feature_generation:
+    cmd: python src/features/build_features.py data/interim/train_data.pkl data/processed/train_data.pkl;
+    deps:
+    - data/interim/train_data.pkl
+    - src/features/build_features.py
+    - src/features/features_generation.py
+    outs:
+    - data/processed/train_data.pkl
+  train_model:
+    cmd: python src/models/train_model.py data/processed/train_data.pkl data/interim/train_target.pkl
+      models/best_model.pkl
+    deps:
+    - data/interim/train_target.pkl
+    - data/processed/train_data.pkl
+    - src/models/predict_model.py
+    - src/models/train.py
+    outs:
+    - models/best_model.pkl
+  preprocess_test_data:
+    cmd: python src/data/make_dataset.py data/raw/test.csv --output_data_filepath
+      data/interim/test.pkl
+    deps:
+    - data/raw/test.csv
+    - src/data/make_dataset.py
+    - src/data/preprocess.py
+    outs:
+    - data/interim/test.pkl
+  test_feature_generation:
+    cmd: python src/features/build_features.py data/interim/test.pkl data/processed/test.pkl
+    deps:
+    - data/interim/test.pkl
+    - src/features/build_features.py
+    - src/features/features_generation.py
+    outs:
+    - data/processed/test.pkl
+  predict_best_model:
+    cmd: python src/models/predict_model.py data/processed/test.pkl models/best_model.pkl predictions/test_predict.pkl
+    deps:
+    - data/processed/test.pkl
+    - models/best_model.pkl
+    - src/models/predict_model.py
+    outs:
+    - predictions/test_predict.pkl
