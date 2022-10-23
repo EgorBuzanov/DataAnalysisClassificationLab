@@ -5,7 +5,7 @@ import pandas as pd
 import sys
 import os
 from pathlib import Path
-from train import train_model, save_model
+from train import train_model, save_model, save_labels
 from dotenv import find_dotenv, load_dotenv
 
 # sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
@@ -15,7 +15,8 @@ from dotenv import find_dotenv, load_dotenv
 @click.argument('input_data_filepath', type=click.Path(exists=True))
 @click.argument('input_target_filepath', type=click.Path(exists=True))
 @click.argument('output_model_filepath', type=click.Path())
-def main(input_data_filepath, input_target_filepath, output_model_filepath):
+@click.argument('output_val_folderpath', type=click.Path())
+def main(input_data_filepath, input_target_filepath, output_model_filepath, output_val_folderpath):
     """ Runs data processing scripts to turn raw data from (../raw) into
         cleaned data ready to be analyzed (saved in ../processed).
     """
@@ -24,7 +25,8 @@ def main(input_data_filepath, input_target_filepath, output_model_filepath):
     
     train = pd.read_pickle(input_data_filepath)
     target = pd.read_pickle(input_target_filepath)
-    model = train_model(train, target)
+    model, val_true, val_pred = train_model(train, target)
+    save_labels(val_true, val_pred, output_val_folderpath)
     save_model(model, output_model_filepath)
     
     

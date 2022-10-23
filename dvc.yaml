@@ -19,7 +19,7 @@ stages:
     - data/processed/train_data.pkl
   train_model:
     cmd: python src/models/train_model.py data/processed/train_data.pkl data/interim/train_target.pkl
-      models/best_model.pkl
+      models/best_model.pkl data/interim
     deps:
     - data/interim/train_target.pkl
     - data/processed/train_data.pkl
@@ -45,9 +45,8 @@ stages:
     outs:
     - data/processed/test.pkl
   evaluate_model:
-    cmd: python src/models/evaluate.py metrics/evaluation.json
+    cmd: python src/models/evaluate.py data/interim/y_pred.pkl data/interim/y_true.pkl metrics/evaluation.json
     deps:
-    - data/processed/test.pkl
     - models/best_model.pkl
     - src/models/predict_model.py
     outs:
@@ -55,6 +54,7 @@ stages:
   predict_best_model:
     cmd: python src/models/predict_model.py data/processed/test.pkl models/best_model.pkl predictions/test_predict.pkl
     deps:
+    - data/processed/test.pkl
     - metrics/evaluation.json
     outs:
     - predictions/test_predict.pkl

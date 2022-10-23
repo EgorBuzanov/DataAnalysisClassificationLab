@@ -13,21 +13,18 @@ from src.utils import load_pickle
 
 
 @click.command()
-# @click.argument('input_pred_filepath', type=click.Path(exists=True))
-# @click.argument('input_true_filepath', type=click.Path(exists=True))
+@click.argument('input_pred_filepath', type=click.Path(exists=True))
+@click.argument('input_true_filepath', type=click.Path(exists=True))
 @click.argument('out_metrics_filepath', type=click.Path())
-def main(out_metrics_filepath):  # input_pred_filepath, input_true_filepath
+def main(input_pred_filepath, input_true_filepath, out_metrics_filepath):
 
     logger = logging.getLogger(__name__)
     logger.info('model evaluation...')
 
-    # pred = load_pickle(input_pred_filepath)
-    # true = load_pickle(input_true_filepath)
+    pred = load_pickle(input_pred_filepath)
+    true = load_pickle(input_true_filepath)
 
-    # metrics = {'f1_score_samples': f1_score(true, pred, average='samples', zero_division=0)}
-    # with open(out_metrics_filepath, "w") as f:
-    #     json.dump(metrics, f)
-    metrics = {'f1_score_samples': 4815162342}
+    metrics = {'f1_score_samples': f1_score(true, pred, average='samples', zero_division=0)}
     with open(out_metrics_filepath, "w") as f:
         json.dump(metrics, f)
     

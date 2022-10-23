@@ -1,3 +1,4 @@
+import os
 import pickle
 import pandas as pd
 import numpy as np
@@ -86,12 +87,14 @@ def catboost_model(train_data: pd.DataFrame, train_target: pd.DataFrame) -> CatB
 def best_model(sklearn_model: MultiOutputClassifier,
                catboost_model: CatBoostClassifier,
                val_data: pd.DataFrame,
-               val_target: pd.DataFrame) -> Union[MultiOutputClassifier, CatBoostClassifier]:
+               val_target: pd.DataFrame) -> Tuple[Union[MultiOutputClassifier, CatBoostClassifier],
+                                                  np.ndarray]:
     val_predict_sklearn = sklearn_model.predict(val_data)
     val_predict_catboost = catboost_model.predict(val_data)
     sklearn_metric = fbeta_score(val_target, val_predict_sklearn, beta=2, average='micro')
     catboost_metric = fbeta_score(val_target, val_predict_catboost, beta=2, average='micro')
-    return sklearn_model if sklearn_metric > catboost_metric else catboost_model
+    return ((sklearn_model, val_predict_sklearn) if sklearn_metric > catboost_metric
+                                                 else (catboost_model, val_predict_catboost))
 
 
 def save_model(model: Union[MultiOutputClassifier, CatBoostClassifier], path: str) -> None:
@@ -99,11 +102,22 @@ def save_model(model: Union[MultiOutputClassifier, CatBoostClassifier], path: st
         pickle.dump(model, f)
         
         
-def train_model(train: pd.DataFrame, target: pd.DataFrame) -> Union[MultiOutputClassifier, CatBoostClassifier]:
+def save_labels(true: np.ndarray, pred: np.ndarray, path: str) -> None:
+    true_filepath = os.path.join(path, "y_true.pkl")
+    pred_filepath = os.path.join(path, "y_pred.pkl")
+    with open(true_filepath, 'wb') as f:
+        pickle.dump(true, f)    
+    with open(pred_filepath, 'wb') as f:
+        pickle.dump(pred, f)    
+        
+def train_model(train: pd.DataFrame,
+                target: pd.DataFrame) -> Tuple[Union[MultiOutputClassifier, CatBoostClassifier],
+                                               np.ndarray, np.ndarray]:
     train = category_as_object(train)
     train_data, val_data, train_target, val_target = split_data(train, target)
     sk_model = sklearn_model(train_data, train_target)
     cat_model = catboost_model(train_data, train_target)
-    return best_model(sk_model, cat_model, val_data, val_target)
+    model, val_predict = best_model(sk_model, cat_model, val_data, val_target)
+    return model, val_target, val_predict
 
 

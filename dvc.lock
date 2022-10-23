@@ -38,7 +38,7 @@ stages:
       size: 66084
   train_model:
     cmd: python src/models/train_model.py data/processed/train_data.pkl data/interim/train_target.pkl
-      models/best_model.pkl
+      models/best_model.pkl data/interim
     deps:
     - path: data/interim/train_target.pkl
       md5: 0b4cbec5ca168ffbbfa7399b28d9e2d9
@@ -47,15 +47,15 @@ stages:
       md5: dac2aa538afba95cbe9cd2e967242d7f
       size: 66084
     - path: src/models/train.py
-      md5: 1d2c38c0b2c4a6cabeecd48e087b8b69
-      size: 4537
+      md5: a3da1786a2af2bc993c297added72a5a
+      size: 5199
     - path: src/models/train_model.py
-      md5: f4dd8b82e3e2f9a480736bdc8aaee017
-      size: 1487
+      md5: cdf9d2e3e0dbbdfba5cd4f614fa9d5cf
+      size: 1662
     outs:
     - path: models/best_model.pkl
-      md5: 70059eb372157c34959da3be67de06f4
-      size: 9291813
+      md5: 3403af0cff034fe0e92d253f829292c6
+      size: 1674964
   preprocess_test_data:
     cmd: python src/data/make_dataset.py data/raw/test.csv --output_data_filepath
       data/interim/test.pkl
@@ -93,26 +93,27 @@ stages:
     cmd: python src/models/predict_model.py data/processed/test.pkl models/best_model.pkl
       predictions/test_predict.pkl
     deps:
-    - path: metrics/evaluation.json
-      md5: 76589b1361cae4c736c397a5db17fac4
-      size: 32
-    outs:
-    - path: predictions/test_predict.pkl
-      md5: 7d8f4694d36e72bffa8982878d8537d6
-      size: 3343
-  evaluate_model:
-    cmd: python src/models/evaluate.py metrics/evaluation.json
-    deps:
     - path: data/processed/test.pkl
       md5: dad2cc370e98b78ccd8cb95a81ff512d
       size: 46326
+    - path: metrics/evaluation.json
+      md5: 228f585c64ae77ef2204dc74edcbee76
+      size: 40
+    outs:
+    - path: predictions/test_predict.pkl
+      md5: a05d8ddc07c4ebb2f564d8ebcd299643
+      size: 25673
+  evaluate_model:
+    cmd: python src/models/evaluate.py data/interim/y_pred.pkl data/interim/y_true.pkl
+      metrics/evaluation.json
+    deps:
     - path: models/best_model.pkl
-      md5: 70059eb372157c34959da3be67de06f4
-      size: 9291813
+      md5: 3403af0cff034fe0e92d253f829292c6
+      size: 1674964
     - path: src/models/predict_model.py
       md5: 09dd86ca3afab49c8a3b22a6016dced2
       size: 1285
     outs:
     - path: metrics/evaluation.json
-      md5: 76589b1361cae4c736c397a5db17fac4
-      size: 32
+      md5: 228f585c64ae77ef2204dc74edcbee76
+      size: 40
