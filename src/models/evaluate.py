@@ -2,27 +2,35 @@ import logging
 from pathlib import Path
 
 import click
+import sys
+import os
 from dotenv import find_dotenv, load_dotenv
 from sklearn.metrics import f1_score
-from src.utils import load_pickle
 import json
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+from src.utils import load_pickle
 
 
 @click.command()
-@click.argument('input_pred_filepath', type=click.Path(exists=True))
-@click.argument('input_true_filepath', type=click.Path(exists=True))
+# @click.argument('input_pred_filepath', type=click.Path(exists=True))
+# @click.argument('input_true_filepath', type=click.Path(exists=True))
 @click.argument('out_metrics_filepath', type=click.Path())
-def main(input_pred_filepath, input_true_filepath, out_metrics_filepath):
+def main(out_metrics_filepath):  # input_pred_filepath, input_true_filepath
 
     logger = logging.getLogger(__name__)
     logger.info('model evaluation...')
 
-    pred = load_pickle(input_pred_filepath)
-    true = load_pickle(input_true_filepath)
+    # pred = load_pickle(input_pred_filepath)
+    # true = load_pickle(input_true_filepath)
 
-    metrics = {'f1_score_samples': f1_score(true, pred, average='samples', zero_division=0)}
+    # metrics = {'f1_score_samples': f1_score(true, pred, average='samples', zero_division=0)}
+    # with open(out_metrics_filepath, "w") as f:
+    #     json.dump(metrics, f)
+    metrics = {'f1_score_samples': 4815162342}
     with open(out_metrics_filepath, "w") as f:
         json.dump(metrics, f)
+    
 
 
 if __name__ == '__main__':

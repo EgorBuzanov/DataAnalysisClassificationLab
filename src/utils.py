@@ -1,7 +1,6 @@
 import pickle
-from typing import Any, Union
+from typing import Any
 from pandas import DataFrame
-from pandas.core.indexes.base import Index as PandasIndex
 
 
 def save_as_pickle(obj: Any, path: str) -> None:

@@ -93,6 +93,16 @@ stages:
     cmd: python src/models/predict_model.py data/processed/test.pkl models/best_model.pkl
       predictions/test_predict.pkl
     deps:
+    - path: metrics/evaluation.json
+      md5: 76589b1361cae4c736c397a5db17fac4
+      size: 32
+    outs:
+    - path: predictions/test_predict.pkl
+      md5: 7d8f4694d36e72bffa8982878d8537d6
+      size: 3343
+  evaluate_model:
+    cmd: python src/models/evaluate.py metrics/evaluation.json
+    deps:
     - path: data/processed/test.pkl
       md5: dad2cc370e98b78ccd8cb95a81ff512d
       size: 46326
@@ -103,6 +113,6 @@ stages:
       md5: 09dd86ca3afab49c8a3b22a6016dced2
       size: 1285
     outs:
-    - path: predictions/test_predict.pkl
-      md5: 7d8f4694d36e72bffa8982878d8537d6
-      size: 3343
+    - path: metrics/evaluation.json
+      md5: 76589b1361cae4c736c397a5db17fac4
+      size: 32

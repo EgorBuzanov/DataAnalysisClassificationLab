@@ -44,11 +44,17 @@ stages:
     - src/features/features_generation.py
     outs:
     - data/processed/test.pkl
-  predict_best_model:
-    cmd: python src/models/predict_model.py data/processed/test.pkl models/best_model.pkl predictions/test_predict.pkl
+  evaluate_model:
+    cmd: python src/models/evaluate.py metrics/evaluation.json
     deps:
     - data/processed/test.pkl
     - models/best_model.pkl
     - src/models/predict_model.py
+    outs:
+    - metrics/evaluation.json
+  predict_best_model:
+    cmd: python src/models/predict_model.py data/processed/test.pkl models/best_model.pkl predictions/test_predict.pkl
+    deps:
+    - metrics/evaluation.json
     outs:
     - predictions/test_predict.pkl
