@@ -47,6 +47,7 @@ stages:
   evaluate_model:
     cmd: python src/models/evaluate.py data/interim/y_pred.pkl data/interim/y_true.pkl metrics/evaluation.json
     deps:
+    - src/models/evaluate.py
     - models/best_model.pkl
     - src/models/predict_model.py
     outs:

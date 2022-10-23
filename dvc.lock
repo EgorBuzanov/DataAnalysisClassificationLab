@@ -97,8 +97,8 @@ stages:
       md5: dad2cc370e98b78ccd8cb95a81ff512d
       size: 46326
     - path: metrics/evaluation.json
-      md5: 228f585c64ae77ef2204dc74edcbee76
-      size: 40
+      md5: 58b743248cbe23ef33ead20559595d13
+      size: 149
     outs:
     - path: predictions/test_predict.pkl
       md5: a05d8ddc07c4ebb2f564d8ebcd299643
@@ -110,10 +110,13 @@ stages:
     - path: models/best_model.pkl
       md5: 3403af0cff034fe0e92d253f829292c6
       size: 1674964
+    - path: src/models/evaluate.py
+      md5: bd400374ea1b462868500b44b925e737
+      size: 1647
     - path: src/models/predict_model.py
       md5: 09dd86ca3afab49c8a3b22a6016dced2
       size: 1285
     outs:
     - path: metrics/evaluation.json
-      md5: 228f585c64ae77ef2204dc74edcbee76
-      size: 40
+      md5: 58b743248cbe23ef33ead20559595d13
+      size: 149
