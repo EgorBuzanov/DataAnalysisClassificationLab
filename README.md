@@ -1,4 +1,4 @@
-# DataAnalysisClassificationLab
+# Data Analysis Classification Lab
 Выполнили студенты 19ПМИ-1:
 * **Никита Касьянов**
 * **Егор Бузанов**
