@@ -96,16 +96,19 @@ stages:
     - path: data/processed/test.pkl
       md5: dad2cc370e98b78ccd8cb95a81ff512d
       size: 46326
-    - path: metrics/evaluation.json
-      md5: 58b743248cbe23ef33ead20559595d13
-      size: 149
+    - path: models/best_model.pkl
+      md5: 3403af0cff034fe0e92d253f829292c6
+      size: 1674964
+    - path: src/models/predict_model.py
+      md5: 09dd86ca3afab49c8a3b22a6016dced2
+      size: 1285
     outs:
     - path: predictions/test_predict.pkl
       md5: a05d8ddc07c4ebb2f564d8ebcd299643
       size: 25673
   evaluate_model:
     cmd: python src/models/evaluate.py data/interim/y_pred.pkl data/interim/y_true.pkl
-      metrics/evaluation.json
+      metrics.json
     deps:
     - path: models/best_model.pkl
       md5: 3403af0cff034fe0e92d253f829292c6
@@ -117,6 +120,20 @@ stages:
       md5: 09dd86ca3afab49c8a3b22a6016dced2
       size: 1285
     outs:
-    - path: metrics/evaluation.json
+    - path: metrics.json
+      md5: 58b743248cbe23ef33ead20559595d13
+      size: 149
+  evaluate:
+    cmd: python src/models/evaluate.py data/interim/y_pred.pkl data/interim/y_true.pkl
+      metrics.json
+    deps:
+    - path: models/best_model.pkl
+      md5: 3403af0cff034fe0e92d253f829292c6
+      size: 1674964
+    - path: src/models/evaluate.py
+      md5: bd400374ea1b462868500b44b925e737
+      size: 1647
+    outs:
+    - path: metrics.json
       md5: 58b743248cbe23ef33ead20559595d13
       size: 149

@@ -5,7 +5,7 @@ import click
 import sys
 import os
 from dotenv import find_dotenv, load_dotenv
-from sklearn.metrics import f1_score
+from sklearn.metrics import f1_score, fbeta_score, precision_score, recall_score
 import json
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
@@ -24,9 +24,12 @@ def main(input_pred_filepath, input_true_filepath, out_metrics_filepath):
     pred = load_pickle(input_pred_filepath)
     true = load_pickle(input_true_filepath)
 
-    metrics = {'f1_score_samples': f1_score(true, pred, average='samples', zero_division=0)}
+    metrics = {'f1_score': f1_score(true, pred, average='micro', zero_division=0),
+               'fbeta_score': fbeta_score(true, pred, average='micro', beta=2),
+               'recall': recall_score(true, pred, average='micro'),
+               'precision': precision_score(true, pred, average='micro')}
     with open(out_metrics_filepath, "w") as f:
-        json.dump(metrics, f)
+        json.dump(metrics, f, indent=4)
     
 
 
