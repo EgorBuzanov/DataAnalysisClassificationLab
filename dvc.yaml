@@ -27,6 +27,8 @@ stages:
     - data/processed/train_data.pkl
     - src/models/train_model.py
     - src/models/train.py
+    params:
+    - n_estimators
     outs:
     - models/best_model.pkl
 

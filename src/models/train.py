@@ -1,4 +1,5 @@
 import os
+import sys
 import pickle
 import pandas as pd
 import numpy as np
@@ -14,6 +15,9 @@ from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.metrics import fbeta_score, make_scorer
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+from src.utils import get_params
 
 
 def category_as_object(df: pd.DataFrame) -> pd.DataFrame:
@@ -72,10 +76,12 @@ def sklearn_model(train_data: pd.DataFrame, train_target: pd.DataFrame) -> Multi
 
 
 def catboost_model(train_data: pd.DataFrame, train_target: pd.DataFrame) -> CatBoostClassifier:
+    params = get_params()
     model = CatBoostClassifier(loss_function='MultiLogloss',
                                 silent=True,
                                 random_seed=cfg.RS,
-                                cat_features=cfg.CAT_COLS)
+                                cat_features=cfg.CAT_COLS,
+                                n_estimators=params['n_estimators'])
     params  = {'learning_rate': [0.01, 0.1],
                'depth': [4, 10],
                'l2_leaf_reg': [1, 2, 3, 4, 5],
